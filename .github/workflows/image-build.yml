@@ -21,6 +21,9 @@ env:
 jobs:
   image-build:
     name: Image Build
+    permissions:
+      contents: read
+      packages: write
     runs-on: ubuntu-latest
     steps:
       - name: Ensure repository name is lowercase
