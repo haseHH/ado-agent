@@ -1,6 +1,10 @@
 ARG UBUNTU_VERSION=22.04
 FROM ubuntu:${UBUNTU_VERSION}
 
+# re-request ARG cause FROM resets them
+# https://docs.docker.com/reference/dockerfile/#understand-how-arg-and-from-interact
+ARG UBUNTU_VERSION
+
 # setup apt, including Microsoft repo
 ENV DEBIAN_FRONTEND=noninteractive
 RUN echo "APT::Get::Assume-Yes \"true\";" > /etc/apt/apt.conf.d/90assumeyes
