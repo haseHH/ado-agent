@@ -23,6 +23,13 @@ jobs:
     name: Image Build
     runs-on: ubuntu-latest
     steps:
+      - name: Ensure repository name is lowercase
+        run: |
+          $repoName = $env:IMAGE_NAME.ToLower()
+          Write-Host "SET environment variable [ 'REPO_NAME' ] TO [ '${repoName}' ]"
+          Out-File -InputObject "REPO_NAME=${repoName}" -FilePath $env:GITHUB_ENV -Append
+        shell: pwsh
+
       - name: Get available platforms for base image
         run: |
           $baseImage = "ubuntu:22.04"
@@ -62,5 +69,5 @@ jobs:
         with:
           platforms: ${{ env.container_platforms }}
           push: true
-          tags: ghcr.io/${{ env.IMAGE_NAME }}:latest
+          tags: ghcr.io/${{ env.REPO_NAME }}:latest
         timeout-minutes: 15
