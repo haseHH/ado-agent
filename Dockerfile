@@ -24,8 +24,8 @@ RUN apt install --no-install-recommends \
         libgcc-s1 \
         libgssapi-krb5-2 \
         libicu74 \
-        liblttng-ust1 \
-        libssl3 \
+        liblttng-ust1* \
+        libssl3* \
         libstdc++6 \
         libunwind8 \
         zlib1g
