@@ -18,8 +18,8 @@ RUN apt install --no-install-recommends \
         zip \
         jq \
         python3 \
-        python3-pip \
         python-is-python3 \
+        pipx \
         libc6 \
         libgcc-s1 \
         libgssapi-krb5-2 \
@@ -29,7 +29,7 @@ RUN apt install --no-install-recommends \
         libstdc++6 \
         libunwind8 \
         zlib1g
-RUN pip install --progress-bar off --no-color \
+RUN pipx install \
         azure-cli \
         yq
 RUN PSVERSION=`curl -s https://api.github.com/repos/PowerShell/PowerShell/releases/latest | jq -rM .tag_name`; \
