@@ -1,0 +1,66 @@
+name: Image Build
+on:
+  push:
+    branches:
+      - main
+  schedule:
+    #        ┌───────────── minute (0 - 59)
+    #        │ ┌───────────── hour (0 - 23)
+    #        │ │ ┌───────────── day of the month (1 - 31)
+    #        │ │ │ ┌───────────── month (1 - 12 or JAN-DEC)
+    #        │ │ │ │ ┌───────────── day of the week (0 - 6 or SUN-SAT)
+    #        │ │ │ │ │
+    #        │ │ │ │ │
+    #        │ │ │ │ │
+    - cron: '3 3 * * *' # Daily 3:03 UTC
+
+env:
+  # github.repository as <account>/<repo>
+  IMAGE_NAME: ${{ github.repository }}
+
+jobs:
+  image-build:
+    name: Image Build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Get available platforms for base image
+        run: |
+          $baseImage = "ubuntu:22.04"
+          Write-Host "GET manifest FROM base image [ '${baseImage}' ]"
+          $manifestJson = $(docker manifest inspect --verbose $baseImage)
+          $manifest = ConvertFrom-Json -InputObject ($manifestJson | Out-String)
+          Write-Host "GET supported platforms FROM manifest"
+          $platformArray = $manifest | ForEach-Object {
+            $platform = @(
+              $_.Descriptor.platform.os,
+              $_.Descriptor.platform.architecture,
+              $_.Descriptor.platform.variant
+            ) | Where-Object {-not [string]::IsNullOrEmpty($_)}
+            $platform -join '/'
+          } | Sort-Object
+          $platforms = $platformArray -join ','
+          Write-Host "SET environment variable [ 'container_platforms' ] TO [ '${platforms}' ]"
+          Out-File -InputObject "container_platforms=${platforms}" -FilePath $env:GITHUB_ENV -Append
+        shell: pwsh
+
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v3.1.0 # https://github.com/docker/setup-qemu-action
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3.4.0 # https://github.com/docker/setup-buildx-action
+
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@v3.2.0 # https://github.com/docker/login-action
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build and push container image
+        id: try1
+        uses: docker/build-push-action@v6.3.0 # https://github.com/docker/build-push-action
+        with:
+          platforms: ${{ env.container_platforms }}
+          push: true
+          tags: ghcr.io/${{ env.IMAGE_NAME }}:latest
+        timeout-minutes: 15
