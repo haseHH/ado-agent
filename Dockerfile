@@ -30,9 +30,8 @@ RUN apt install --no-install-recommends \
         libstdc++6 \
         libunwind8 \
         zlib1g
-RUN pipx install \
-        azure-cli \
-        yq
+RUN pipx install yq
+RUN curl -L https://aka.ms/InstallAzureCli | bash
 RUN PSVERSION=`curl -s https://api.github.com/repos/PowerShell/PowerShell/releases/latest | jq -rM .tag_name`; \
     case `uname -m` in \
       x86_64) \
