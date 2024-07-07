@@ -7,7 +7,8 @@ RUN echo "APT::Get::Assume-Yes \"true\";" > /etc/apt/apt.conf.d/90assumeyes
 RUN apt update \
  && apt-get install apt-utils \
         apt-transport-https \
-        software-properties-common
+        software-properties-common \
+        wget
 RUN wget -q https://packages.microsoft.com/config/ubuntu/${UBUNTU_VERSION}/packages-microsoft-prod.deb \
  && dpkg -i packages-microsoft-prod.deb \
  && rm packages-microsoft-prod.deb \
@@ -19,7 +20,6 @@ RUN apt install --no-install-recommends \
         ca-certificates \
         git \
         curl \
-        wget \
         unzip \
         zip \
         jq \
