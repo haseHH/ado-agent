@@ -1,4 +1,4 @@
-FROM ubuntu:22.04
+FROM ubuntu:24.04
 
 # setup apt, including Microsoft repo
 ENV DEBIAN_FRONTEND=noninteractive
