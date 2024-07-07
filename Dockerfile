@@ -20,7 +20,15 @@ RUN apt install --no-install-recommends \
         python3 \
         python3-pip \
         python-is-python3 \
-        libicu70
+        libc6 \
+        libgcc-s1 \
+        libgssapi-krb5-2 \
+        libicu74 \
+        liblttng-ust1 \
+        libssl3 \
+        libstdc++6 \
+        libunwind8 \
+        zlib1g
 RUN pip install --progress-bar off --no-color \
         azure-cli \
         yq
