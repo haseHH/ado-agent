@@ -20,6 +20,7 @@ RUN apt install --no-install-recommends \
         python3 \
         python-is-python3 \
         pipx \
+        gcc-arm-linux-gnueabihf \
         libc6 \
         libgcc-s1 \
         libgssapi-krb5-2 \
