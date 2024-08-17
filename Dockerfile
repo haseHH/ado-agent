@@ -54,9 +54,6 @@ RUN PSVERSION=`curl -s https://api.github.com/repos/PowerShell/PowerShell/releas
       aarch64) \
         wget -O /tmp/powershell.tar.gz https://github.com/PowerShell/PowerShell/releases/download/${PSVERSION}/powershell-${PSVERSION#v}-linux-arm64.tar.gz \
         ;; \
-      armv7l) \
-        wget -O /tmp/powershell.tar.gz https://github.com/PowerShell/PowerShell/releases/download/${PSVERSION}/powershell-${PSVERSION#v}-linux-arm32.tar.gz \
-        ;; \
     esac
 RUN mkdir -p /opt/microsoft/powershell/7
 RUN tar zxf /tmp/powershell.tar.gz -C /opt/microsoft/powershell/7
