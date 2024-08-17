@@ -45,8 +45,8 @@ RUN apt update \
         libunwind8 \
         zlib1g \
         azure-cli
-RUN pipx install yq
-RUN PSVERSION=`curl -s https://api.github.com/repos/PowerShell/PowerShell/releases/latest | jq -rM .tag_name`; \
+RUN pipx install --global yq
+RUN PSVERSION=`curl --ca-native -s https://api.github.com/repos/PowerShell/PowerShell/releases/latest | jq -rM .tag_name`; \
     case `uname -m` in \
       x86_64) \
         wget -O /tmp/powershell.tar.gz https://github.com/PowerShell/PowerShell/releases/download/${PSVERSION}/powershell-${PSVERSION#v}-linux-x64.tar.gz \
