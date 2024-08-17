@@ -31,7 +31,10 @@ RUN apt install --no-install-recommends \
         libunwind8 \
         zlib1g
 RUN pipx install yq
-RUN curl -L https://aka.ms/InstallAzureCli | bash
+RUN curl -L https://azurecliprod.blob.core.windows.net/install.py > /tmp/azure-cli-install.py \
+ && echo "" >> /tmp/azure-cli-install.py \
+ && python3 /tmp/azure-cli-install.py \
+ && rm /tmp/azure-cli-install.py
 RUN PSVERSION=`curl -s https://api.github.com/repos/PowerShell/PowerShell/releases/latest | jq -rM .tag_name`; \
     case `uname -m` in \
       x86_64) \
