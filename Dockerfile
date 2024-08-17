@@ -45,7 +45,7 @@ RUN apt update \
         libunwind8 \
         zlib1g \
         azure-cli
-RUN pipx install --global yq
+#RUN pipx install --global yq
 RUN PSVERSION=`curl --ca-native -s https://api.github.com/repos/PowerShell/PowerShell/releases/latest | jq -rM .tag_name`; \
     case `uname -m` in \
       x86_64) \
