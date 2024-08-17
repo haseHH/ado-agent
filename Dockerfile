@@ -2,15 +2,14 @@ FROM ubuntu:24.04
 
 # setup apt and related essentials
 ENV DEBIAN_FRONTEND=noninteractive
-RUN echo "APT::Get::Assume-Yes \"true\";" > /etc/apt/apt.conf.d/90assumeyes
-RUN apt update \
+RUN echo "APT::Get::Assume-Yes \"true\";" > /etc/apt/apt.conf.d/90assumeyes \
+ && apt update \
  && apt-get install apt-utils \
         apt-transport-https \
         ca-certificates \
         curl \
         gnupg \
         lsb-release
-RUN apt upgrade
 
 # setup Microsoft azure-cli repo
 ADD https://packages.microsoft.com/keys/microsoft.asc /tmp/microsoft.asc
@@ -48,13 +47,13 @@ RUN apt update \
         zlib1g \
         azure-cli
 #RUN pipx install --global yq
-RUN PSVERSION=`curl --ca-native -s https://api.github.com/repos/PowerShell/PowerShell/releases/latest | jq -rM .tag_name`; \
+RUN PSVERSION=`curl -# --ca-native -s https://api.github.com/repos/PowerShell/PowerShell/releases/latest | jq -rM .tag_name`; \
     case `uname -m` in \
       x86_64) \
-        wget -O /tmp/powershell.tar.gz https://github.com/PowerShell/PowerShell/releases/download/${PSVERSION}/powershell-${PSVERSION#v}-linux-x64.tar.gz \
+        wget -qO /tmp/powershell.tar.gz https://github.com/PowerShell/PowerShell/releases/download/${PSVERSION}/powershell-${PSVERSION#v}-linux-x64.tar.gz \
         ;; \
       aarch64) \
-        wget -O /tmp/powershell.tar.gz https://github.com/PowerShell/PowerShell/releases/download/${PSVERSION}/powershell-${PSVERSION#v}-linux-arm64.tar.gz \
+        wget -qO /tmp/powershell.tar.gz https://github.com/PowerShell/PowerShell/releases/download/${PSVERSION}/powershell-${PSVERSION#v}-linux-arm64.tar.gz \
         ;; \
     esac
 RUN mkdir -p /opt/microsoft/powershell/7
