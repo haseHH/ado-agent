@@ -13,17 +13,17 @@ RUN apt update \
 RUN apt upgrade
 
 # setup Microsoft azure-cli repo
-RUN mkdir -p /etc/apt/keyrings
 ADD https://packages.microsoft.com/keys/microsoft.asc /tmp/microsoft.asc
-RUN cat /tmp/microsoft.asc | gpg --dearmor | tee /etc/apt/keyrings/microsoft.gpg > /dev/null
-RUN rm /tmp/microsoft.asc
-RUN chmod go+r /etc/apt/keyrings/microsoft.gpg
-RUN echo "Types: deb" > /etc/apt/sources.list.d/azure-cli.sources
-RUN echo "URIs: https://packages.microsoft.com/repos/azure-cli/" >> /etc/apt/sources.list.d/azure-cli.sources
-RUN echo "Suites: $(lsb_release -cs)" >> /etc/apt/sources.list.d/azure-cli.sources
-RUN echo "Components: main" >> /etc/apt/sources.list.d/azure-cli.sources
-RUN echo "Architectures: $(dpkg --print-architecture)" >> /etc/apt/sources.list.d/azure-cli.sources
-RUN echo "Signed-by: /etc/apt/keyrings/microsoft.gpg" >> /etc/apt/sources.list.d/azure-cli.sources
+RUN mkdir -p /etc/apt/keyrings \
+ && cat /tmp/microsoft.asc | gpg --dearmor | tee /etc/apt/keyrings/microsoft.gpg > /dev/null \
+ && rm /tmp/microsoft.asc \
+ && chmod go+r /etc/apt/keyrings/microsoft.gpg \
+ && echo "Types: deb" > /etc/apt/sources.list.d/azure-cli.sources \
+ && echo "URIs: https://packages.microsoft.com/repos/azure-cli/" >> /etc/apt/sources.list.d/azure-cli.sources \
+ && echo "Suites: $(lsb_release -cs)" >> /etc/apt/sources.list.d/azure-cli.sources \
+ && echo "Components: main" >> /etc/apt/sources.list.d/azure-cli.sources \
+ && echo "Architectures: $(dpkg --print-architecture)" >> /etc/apt/sources.list.d/azure-cli.sources \
+ && echo "Signed-by: /etc/apt/keyrings/microsoft.gpg" >> /etc/apt/sources.list.d/azure-cli.sources
 
 # install dependencies
 RUN apt update \
