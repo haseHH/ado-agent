@@ -14,7 +14,9 @@ RUN apt upgrade
 
 # setup Microsoft azure-cli repo
 RUN mkdir -p /etc/apt/keyrings
-RUN curl --ca-native -sLS https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor | tee /etc/apt/keyrings/microsoft.gpg > /dev/null
+ADD https://packages.microsoft.com/keys/microsoft.asc /tmp/microsoft.asc
+RUN cat /tmp/microsoft.asc | gpg --dearmor | tee /etc/apt/keyrings/microsoft.gpg > /dev/null
+RUN rm /tmp/microsoft.asc
 RUN chmod go+r /etc/apt/keyrings/microsoft.gpg
 RUN echo "Types: deb" > /etc/apt/sources.list.d/azure-cli.sources
 RUN echo "URIs: https://packages.microsoft.com/repos/azure-cli/" >> /etc/apt/sources.list.d/azure-cli.sources
